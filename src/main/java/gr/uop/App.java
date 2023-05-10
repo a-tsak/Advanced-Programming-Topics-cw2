@@ -3,6 +3,8 @@ package gr.uop;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -39,18 +41,21 @@ public class App extends Application {
 
 
         //making an ObservableList with strings from item 0 to item 50
-        ObservableList<String> listItems =FXCollections.observableArrayList();
+        ObservableList<String> itemsLeft =FXCollections.observableArrayList();
         for(int i=0; i<51; i++){
-            listItems.add("item "+i);
+            itemsLeft.add("item "+i);
 
         }
+        //making another empty observable list 
+        ObservableList<String> itemsRight =FXCollections.observableArrayList(); //the list on the right
+        
 
 
         //The first Vbox containing the filter and the list
         TextField filter = new TextField();
         filter.setPromptText("type to filter");
         //The left list
-        ListView itemsLeft = new ListView<>(listItems);
+        ListView leftList = new ListView<>(itemsLeft);
         
         //First VBox properties
         VBox list1 = new VBox(5);
@@ -58,7 +63,7 @@ public class App extends Application {
         list1.setPrefWidth(150);
         list1.setMinWidth(150);
 
-        list1.getChildren().addAll(filter,itemsLeft);
+        list1.getChildren().addAll(filter,leftList);
         
 
 
@@ -77,7 +82,7 @@ public class App extends Application {
 
 
         //The third VBox containing the second list
-        ListView itemsRight = new ListView<>();
+        ListView rightList = new ListView<>(itemsRight);
 
         //Third VBox properties
         VBox list2 = new VBox(5);
@@ -85,7 +90,7 @@ public class App extends Application {
         list2.setAlignment(Pos.CENTER);
         list2.setPrefWidth(150);
         list2.setMinWidth(150);
-        list2.getChildren().addAll(itemsRight);
+        list2.getChildren().addAll(rightList);
 
 
 
@@ -102,6 +107,48 @@ public class App extends Application {
 
 
         
+
+
+
+        //Functionalities
+        filter.textProperty().addListener(new ChangeListener<String>() {        //Filter application
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                
+                leftList.setItems(showList(itemsLeft,newValue));
+                
+            }
+
+            
+        });
+
+
+
+
+
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,5 +170,47 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
+
+
+    public ObservableList showList(ObservableList leftList, String filter){
+        ObservableList<String> filteredList =FXCollections.observableArrayList(); //another list that is used to show filtered items
+
+        leftList.forEach((item) -> {
+            if(item.toString().contains(filter)){
+                filteredList.add(item.toString());
+            }
+        });
+
+        if(filter.isBlank()){
+            return leftList;
+
+        }
+
+
+        return filteredList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
