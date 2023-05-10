@@ -27,6 +27,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        
         //Importing the images for the buttons
         ImageView up = new ImageView(new Image(getClass().getResourceAsStream("images/up.png")));
         ImageView down = new ImageView(new Image(getClass().getResourceAsStream("images/down.png")));
@@ -52,7 +54,6 @@ public class App extends Application {
         
         //First VBox properties
         VBox list1 = new VBox(5);
-        VBox.setMargin(list1, new Insets(5, 0, 10, 10));
         list1.setAlignment(Pos.CENTER);
 
 
@@ -75,8 +76,25 @@ public class App extends Application {
 
 
 
+        //The third VBox containing the second list
+        ListView itemsRight = new ListView<>();
+        VBox list2 = new VBox(5);
+        list2.setAlignment(Pos.CENTER);
+
+        list2.getChildren().addAll(itemsRight);
 
 
+
+        //The fourth VBox containing the up and down buttons
+        VBox buttons2 = new VBox(5);
+        buttons2.setAlignment(Pos.CENTER);
+        Button upButton = new Button();
+        Button downButton = new Button();
+        upButton.setGraphic(up);
+        downButton.setGraphic(down);
+
+
+        buttons2.getChildren().addAll(upButton,downButton);
 
 
 
@@ -84,9 +102,10 @@ public class App extends Application {
         //A Hbox with all the Vboxes containing the items and controls
         HBox vBoxes = new HBox(5);
 
-        vBoxes.getChildren().addAll(list1,buttons1);
-        HBox.setMargin(vBoxes, new Insets(5, 5, 20, 20));
-        vBoxes.setAlignment(Pos.CENTER);
+        vBoxes.getChildren().addAll(list1,buttons1,list2,buttons2);
+        
+
+
 
         var scene = new Scene(vBoxes, 640, 480);
         stage.setScene(scene);
