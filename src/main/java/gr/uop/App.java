@@ -28,7 +28,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
 
-        
+
         //Importing the images for the buttons
         ImageView up = new ImageView(new Image(getClass().getResourceAsStream("images/up.png")));
         ImageView down = new ImageView(new Image(getClass().getResourceAsStream("images/down.png")));
@@ -46,7 +46,7 @@ public class App extends Application {
         }
 
 
-        //The first Vbox
+        //The first Vbox containing the filter and the list
         TextField filter = new TextField();
         filter.setPromptText("type to filter");
         //The left list
@@ -55,8 +55,8 @@ public class App extends Application {
         //First VBox properties
         VBox list1 = new VBox(5);
         list1.setAlignment(Pos.CENTER);
-
-
+        list1.setPrefWidth(150);
+        list1.setMinWidth(150);
 
         list1.getChildren().addAll(filter,itemsLeft);
         
@@ -78,9 +78,13 @@ public class App extends Application {
 
         //The third VBox containing the second list
         ListView itemsRight = new ListView<>();
-        VBox list2 = new VBox(5);
-        list2.setAlignment(Pos.CENTER);
 
+        //Third VBox properties
+        VBox list2 = new VBox(5);
+        list2.setPadding(new Insets(30, 0, 0, 0));
+        list2.setAlignment(Pos.CENTER);
+        list2.setPrefWidth(150);
+        list2.setMinWidth(150);
         list2.getChildren().addAll(itemsRight);
 
 
@@ -97,13 +101,16 @@ public class App extends Application {
         buttons2.getChildren().addAll(upButton,downButton);
 
 
+        
+
+
 
 
         //A Hbox with all the Vboxes containing the items and controls
         HBox vBoxes = new HBox(5);
-
+        vBoxes.setPadding(new Insets(10, 10, 50, 10));
         vBoxes.getChildren().addAll(list1,buttons1,list2,buttons2);
-        
+        vBoxes.setAlignment(Pos.CENTER);
 
 
 
