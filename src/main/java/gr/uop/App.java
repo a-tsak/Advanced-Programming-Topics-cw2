@@ -30,45 +30,36 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
 
-
-        //Importing the images for the buttons
+        // Importing the images for the buttons
         ImageView up = new ImageView(new Image(getClass().getResourceAsStream("images/up.png")));
         ImageView down = new ImageView(new Image(getClass().getResourceAsStream("images/down.png")));
         ImageView right = new ImageView(new Image(getClass().getResourceAsStream("images/right.png")));
         ImageView left = new ImageView(new Image(getClass().getResourceAsStream("images/left.png")));
 
-
-
-
-        //making an ObservableList with strings from item 0 to item 50
-        ObservableList<String> itemsLeft =FXCollections.observableArrayList();
-        for(int i=0; i<51; i++){
-            itemsLeft.add("item "+i);
+        // making an ObservableList with strings from item 0 to item 50
+        ObservableList<String> itemsLeft = FXCollections.observableArrayList();
+        for (int i = 0; i < 51; i++) {
+            itemsLeft.add("item " + i);
 
         }
-        //making another empty observable list 
-        ObservableList<String> itemsRight =FXCollections.observableArrayList(); //the list on the right
-        
+        // making another empty observable list
+        ObservableList<String> itemsRight = FXCollections.observableArrayList(); // the list on the right
 
-
-        //The first Vbox containing the filter and the list
+        // The first Vbox containing the filter and the list
         TextField filter = new TextField();
         filter.setPromptText("type to filter");
-        //The left list
+        // The left list
         ListView leftList = new ListView<>(itemsLeft);
-        
-        //First VBox properties
+
+        // First VBox properties
         VBox list1 = new VBox(5);
         list1.setAlignment(Pos.CENTER);
         list1.setPrefWidth(150);
         list1.setMinWidth(150);
 
-        list1.getChildren().addAll(filter,leftList);
-        
+        list1.getChildren().addAll(filter, leftList);
 
-
-
-        //The second VBox containing the left and right buttons
+        // The second VBox containing the left and right buttons
         VBox buttons1 = new VBox(5);
         buttons1.setAlignment(Pos.CENTER);
         Button rightButton = new Button();
@@ -76,15 +67,12 @@ public class App extends Application {
         rightButton.setGraphic(right);
         leftButton.setGraphic(left);
 
+        buttons1.getChildren().addAll(rightButton, leftButton);
 
-        buttons1.getChildren().addAll(rightButton,leftButton);
-
-
-
-        //The third VBox containing the second list
+        // The third VBox containing the second list
         ListView rightList = new ListView<>(itemsRight);
 
-        //Third VBox properties
+        // Third VBox properties
         VBox list2 = new VBox(5);
         list2.setPadding(new Insets(30, 0, 0, 0));
         list2.setAlignment(Pos.CENTER);
@@ -92,9 +80,7 @@ public class App extends Application {
         list2.setMinWidth(150);
         list2.getChildren().addAll(rightList);
 
-
-
-        //The fourth VBox containing the up and down buttons
+        // The fourth VBox containing the up and down buttons
         VBox buttons2 = new VBox(5);
         buttons2.setAlignment(Pos.CENTER);
         Button upButton = new Button();
@@ -102,64 +88,59 @@ public class App extends Application {
         upButton.setGraphic(up);
         downButton.setGraphic(down);
 
+        buttons2.getChildren().addAll(upButton, downButton);
 
-        buttons2.getChildren().addAll(upButton,downButton);
-
-
-        
-
-
-
-        //Functionalities
-        filter.textProperty().addListener(new ChangeListener<String>() {        //Filter application
+        // Functionalities
+        filter.textProperty().addListener(new ChangeListener<String>() { // Filter application
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                
-                leftList.setItems(showList(itemsLeft,newValue));
-                
+
+                leftList.setItems(showList(itemsLeft, newValue));
+
             }
 
-            
         });
 
+        rightButton.setOnAction((e) -> { // Right button pressed
+            Object temp = leftList.getSelectionModel().getSelectedItem();
 
+            if (temp != null) {
 
+                leftList.getSelectionModel().select(leftList.getSelectionModel().getSelectedIndex() + 1); // selects
+                                                                                                          // automatically
+                                                                                                          // the next
+                                                                                                          // item
+                leftList.getItems().remove(temp);
+                rightList.getItems().add(temp);
+            }
 
+        });
 
-        
-        
+        leftButton.setOnAction((e) -> { // Left button pressed
+            Object temp = rightList.getSelectionModel().getSelectedItem();
+            int index;
+            if (temp != null) {
 
+                rightList.getSelectionModel().select(rightList.getSelectionModel().getSelectedIndex() + 1); // selects
+                                                                                                            // automatically
+                                                                                                            // the next
+                                                                                                            // item
+                rightList.getItems().remove(temp);
 
+                String[] split = temp.toString().split(" ");
+                index = Integer.parseInt(split[1]);
+                System.out.println(temp.toString());
+                leftList.getItems().add(index, temp);
+            }
 
+        });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //A Hbox with all the Vboxes containing the items and controls
+        // A Hbox with all the Vboxes containing the items and controls
         HBox vBoxes = new HBox(5);
         vBoxes.setPadding(new Insets(10, 10, 50, 10));
-        vBoxes.getChildren().addAll(list1,buttons1,list2,buttons2);
+        vBoxes.getChildren().addAll(list1, buttons1, list2, buttons2);
         vBoxes.setAlignment(Pos.CENTER);
-
-
 
         var scene = new Scene(vBoxes, 640, 480);
         stage.setScene(scene);
@@ -171,46 +152,22 @@ public class App extends Application {
         launch(args);
     }
 
-
-
-
-    public ObservableList showList(ObservableList leftList, String filter){
-        ObservableList<String> filteredList =FXCollections.observableArrayList(); //another list that is used to show filtered items
+    public ObservableList showList(ObservableList leftList, String filter) {
+        ObservableList<String> filteredList = FXCollections.observableArrayList(); // another list that is used to show
+                                                                                   // filtered items
 
         leftList.forEach((item) -> {
-            if(item.toString().contains(filter)){
+            if (item.toString().contains(filter)) {
                 filteredList.add(item.toString());
             }
         });
 
-        if(filter.isBlank()){
+        if (filter.isBlank()) {
             return leftList;
 
         }
 
-
         return filteredList;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
