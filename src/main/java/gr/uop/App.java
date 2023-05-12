@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -119,7 +120,11 @@ public class App extends Application {
 
         leftButton.setOnAction((e) -> { // Left button pressed
             Object temp = rightList.getSelectionModel().getSelectedItem();
-            int index;
+
+            
+
+
+            
             if (temp != null) {
 
                 rightList.getSelectionModel().select(rightList.getSelectionModel().getSelectedIndex() + 1); // selects
@@ -127,14 +132,23 @@ public class App extends Application {
                                                                                                             // the next
                                                                                                             // item
                 rightList.getItems().remove(temp);
+                leftList.getItems().add(temp);
 
-                String[] split = temp.toString().split(" ");
-                index = Integer.parseInt(split[1]);
-                System.out.println(temp.toString());
-                leftList.getItems().add(index, temp);
+
+
+                leftList.getItems().sort(new CustomComparator());       //Whenever an item is added to the left list, it sorts it by comparing the last digits of the string
             }
 
         });
+
+
+
+       
+
+
+
+
+
 
         // A Hbox with all the Vboxes containing the items and controls
         HBox vBoxes = new HBox(5);
